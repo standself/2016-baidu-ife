@@ -1,0 +1,138 @@
+/*
+* {
+	margin:0px;
+	padding:0px;
+}
+body {
+	padding:20px;
+}
+
+#leftSide {
+	background-color:white;
+	float:left;
+	width:202px;
+	height:auto;
+	margin-left:-204px;
+	position:relative;
+	border:1px solid #999;
+}
+	#leftSide img {
+		width:80px;
+		height:80px;
+		padding:0px;
+		margin:20px;
+		float:left;
+	}
+	#leftSide span {
+		width:60px;
+		height:80px; 
+		margin:20px 10px;
+		padding:0px;
+		float:left;
+		background-color:white;
+	}
+
+#rightSide{
+	background-color:white;
+	float:left;
+	width:120px;
+	margin-right:-140px;
+	position:relative;
+	border:1px solid #999;
+	margin-bottom:-30000px;
+	padding-bottom:30000px;
+}
+
+	#rightSide img{
+		height:80px;
+		width:80px;
+		margin:10px 20px;
+	}
+
+#main {
+	float:left;
+	width:100%;
+	margin-bottom:-30000px;
+	padding-bottom:30000px;
+}
+	#main div{
+		margin:0px 20px;
+		background-color:white;
+		border:1px solid #999;
+		padding:20px;
+	}
+
+#wrapper {
+	width:auto;
+	padding:20px 140px 20px 222px;
+	border:1px solid blue;
+	height:auto;
+	background-color:#eee;
+	overflow: hidden;
+}
+*/
+
+/*采用上面的方法，总是不能够把下面的各栏padding与最外部容器隔开*/
+
+* {
+	padding:0px;
+	margin:0px;
+}
+div{
+	box-sizing:border-box;
+}
+.clear{
+	clear:both;
+}
+body{
+	padding:20px;
+}
+
+#leftSide,#main,#rightSide{
+	background-color:white;
+}
+
+#wrapper{
+	width:100%;
+	background-color:#eee;
+	padding:20px;
+	max-height:100%;
+}
+
+#leftSide{
+	float:left;
+	width:200px;
+	border:1px solid #999;
+	padding:20px;
+}
+	#leftSide img{
+		height:80px;
+		width:80px;
+		margin-right: 20px;
+		float:left;
+	}
+	#leftSide div{
+		width:58px;
+		text-align:center;
+		border:1px solid #999;
+		float:left;
+	}
+
+#rightSide{
+	width:120px;
+	height:auto;
+	border:1px solid #999;
+	float:right;
+	padding:10px;
+}
+	#rightSide img{
+		width:80px;
+		height:80px;
+		margin:10px;
+	}
+
+#main{
+	border:1px solid #999;
+	padding:20px;
+	margin:0px 140px 0px 220px;
+}
