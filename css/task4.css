@@ -1,0 +1,14 @@
+*{
+	margin:0px;
+	padding:0px;
+}
+
+.gray{
+	height:200px;
+	width:400px;
+	margin:0px auto;
+	background-color:#ccc;
+	border-top-left-radius:-50px;
+	border-bottom-right-radius: -50px;
+	border-color:#fc0; 
+}
