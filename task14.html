@@ -20,6 +20,7 @@ var aqiData = [
 	["西安",100]
 ];
 
+//used for ranging.
 var num = [	
 	[1,"一"],
 	[2,"二"],
@@ -27,9 +28,11 @@ var num = [
 	[4,"四"],
 	[5,"五"],
 ];
+
 var ulEle = document.getElementById("aqi-list");
 for(var i=0,j=1;i<aqiData.length;i++) {
 	if (aqiData[i][1]>=60) {
+		//空气指数大于等于60的添加到列表中，并显示排名。
 		var newli = document.createElement("li");
 		//var liText = document.createTextNode(aqiData[i][0]);
 		for(var k=0;k<num.length;k++){
