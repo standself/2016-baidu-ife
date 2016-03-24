@@ -78,7 +78,6 @@ function sortAqiData(data) {
  */
 function render(data) {
 	var ulEle = document.getElementById("resort");
-	console.log(data);
 	ulEle.innerHTML = "";
 	for(var i=0,j=1;i<data.length;i++) {
 		var newLi = document.createElement("li");
