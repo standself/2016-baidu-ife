@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>task 8</title>
+	<meta charset="utf-8" />
+	<style>
+		div {
+			box-sizing:border-box;
+		}
+		.grid {
+			width:100%;
+			padding:10px;
+		}
+		.row [class*="row-"] {
+			border: 1px solid #999;
+			margin:10px;
+			height:50px;
+			background-color: #eee;
+			float:left;
+		}
+		.row:before,
+		.row:after {
+			content: "";
+			display: block;
+			clear:both;
+		}
+		.row {
+			padding:10px;
+			width:100%;
+		}
+		/*以下的calc学习自http://ife-itstudio.github.io/Task1_8/css/css.css*/
+		@media all and ( min-width:768px ) {
+			.row-md-1 {
+				width: calc(8.33% - 20px);
+			}
+			.row-md-2 {;
+				width: calc(16.66% - 20px);
+			}
+			.row-md-3 {
+				width: calc(25% - 20px);
+			}
+			.row-md-4 {
+				width:calc(33.33% - 20px);
+			}
+			.row-md-6 {
+				width:calc(50% - 20px);
+			}
+		}
+		@media all and ( max-width:768px ) {
+			.row-xs-2 {
+				width:calc(16.66% - 20px);
+			}
+			.row-xs-3 {
+				width:calc(24.99% - 20px);
+			}
+			.row-xs-6 {
+				width:calc(50% - 20px);
+			}
+			.row-xs-8 {
+				width:calc(66.66% - 20px);
+			}
+			.row-xs-12 {
+				width:calc(100% - 20px);
+			}
+		}
+		/*
+		[class*="row-"] {
+			width:calc(width-20px);
+		}*/
+	</style>
+</head>
+<body>
+<div class="grid">
+	<div class="row">
+		<div class="row-md-4 row-xs-6">四栏</div>
+		<div class="row-md-4 row-xs-6">四栏</div>
+		<div class="row-md-4 row-xs-12">四栏</div>
+	</div>
+	<div class="row">
+		<div class="row-md-3 row-xs-3">三栏</div>
+		<div class="row-md-6 row-xs-3">六栏</div>
+		<div class="row-md-3 row-xs-3">三栏</div>
+	</div>
+	<div class="row">
+		<div class="row-md-1 row-xs-2">一栏</div>
+		<div class="row-md-1 row-xs-2">一栏</div>
+		<div class="row-md-2 row-xs-8">二栏</div>
+		<div class="row-md-2 row-xs-3">二栏</div>
+		<div class="row-md-6 row-xs-3">六栏</div>
+	</div>
+</div>
+</body>
+</html>
