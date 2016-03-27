@@ -2,3 +2,4 @@
 2、先有float：left和right。在有中间栏的margin=left和right。
 3、float会造成容器不能正常计算元素高度。解决方案：overflow的hidden属性和clear的both属性都可。后者需额外的标签。
 4、在没有后续表格单元的情况下，如何实现表格单元的跨列？
+5.when using calc() to calculate your width or others for self-adaption, you must make sure that there are spaces around the operator "+" and "-". 
