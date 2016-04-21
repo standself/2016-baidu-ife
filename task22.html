@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>task22-二叉树算法</title>
+	<meta charset="utf-8" />
+	<style type="text/css">
+		div{
+			box-sizing: border-box;
+			border: 1px solid black;
+			float: left;
+			background-color: white; 
+		}
+		.wrapper1{
+			width: 538px;
+			height: 78px;
+			margin: auto;
+		}
+
+		.wrapper2{
+			width: 258px;
+			height: 68px;
+			margin:5px;
+		}
+		.wrapper3{
+			width: 118px;
+			height: 58px;
+			margin:5px;
+		}
+		.wrapper4{
+			width: 48px;
+			height: 48px;
+			float: left;
+			margin: 5px;
+		}
+		.clearfix{
+			clear:both;
+			display: inline;
+		}
+	</style>
+</head>
+<body>
+	<div id="wrapper1"
+	><div class="wrapper2"
+		><div class="wrapper3"
+			><div class="wrapper4"></div
+			><div class="wrapper4"></div
+			></div
+			><div class="wrapper3"
+				><div class="wrapper4"></div
+				><div class="wrapper4"></div
+			></div
+		></div
+		><div class="wrapper2"
+			><div class="wrapper3"
+				><div class="wrapper4"></div
+				><div class="wrapper4"></div
+			></div
+			><div class="wrapper3"
+				><div class="wrapper4"></div
+				><div class="wrapper4"></div
+			></div
+		></div
+	></div>
+	<div class="clearfix"></div>
+	<div id="wrapper2">
+		<div class="wrapper2">
+			<div class="wrapper3">
+				<div class="wrapper4"></div>
+				<div class="wrapper4"></div>
+			</div>
+			<div class="wrapper3">
+				<div class="wrapper4"></div>
+				<div class="wrapper4"></div>
+			</div>
+		</div>
+		<div class="wrapper2">
+			<div class="wrapper3">
+				<div class="wrapper4"></div>
+				<div class="wrapper4"></div>
+			</div>
+			<div class="wrapper3">
+				<div class="wrapper4"></div>
+				<div class="wrapper4"></div>
+			</div>
+		</div>
+	</div>
+	<button id="seq">遍历 1</button>
+	<button id="antiSeq">遍历 2</button>
+
+
+	<script>
+		var divWrapper1 = document.getElementById("wrapper1");
+		var divWrapper2 = document.getElementById("wrapper2");
+		var divList1 = [];
+		var divList2 = [];
+		function each(node) {
+			if ( !(node == null) ) {
+				divList.push(node);
+				each(node.firstChild);
+				each(node.lastChild);
+			}
+		}
+		function firstNode(node) {
+			var childs = node.childNodes;
+			for (var i=0; i<childs.length; i++ ) {
+				if ( childs[i].nodeType == "1" ) return childs[i];
+			}
+		}
+		function lastNode(node) {
+			var childs = node.childNodes;
+			for (var i=childs.length-1; i>0; i-- ) {
+				if ( childs[i].nodeType == "1" ) return childs[i];
+			}
+		}
+		function each2(node) {
+			if ( node != null ) {
+				divList2.push(node);
+				each2(firstNode(node));
+				each2(lastNode(node));
+			}
+		}
+		function colorChange(list) {
+			var i = 0;
+			list[i].style.backgroundColor = "blue";	
+			var time = setInterval(function(){
+				i++;
+				if( i < list.length) {
+					list[i].style.backgroundColor = "blue";
+					list[i-1].style.backgroundColor = "white";
+				} else {
+					list[list.length-1].style.backgroundColor = "white";
+					clearInterval(time);
+				}
+			}, 1000); 
+		}
+		var buttons = document.getElementsByTagName("button");
+		buttons[0].onclick = function() {
+			each(divWrapper1);
+			colorChange(divList);
+		};
+		buttons[1].onclick = function() {
+			each2(divWrapper2);
+			colorChange(divList2);
+		};
+	</script>
+</body>
+</html>
