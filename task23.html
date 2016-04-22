@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>fe-icanfly  task23</title>
+	<meta charset="utf-8" />
+	<style>
+	div{
+		box-sizing: border-box;
+		display: inline-block;
+		border: 1px solid black;
+		margin:5px;
+		width: auto;
+		height: auto;
+	}
+	.wrapper5{
+		width: 40px;
+		height: 40px;
+	}
+	.clearfix {
+		clear: both;
+	}
+	</style>
+</head>
+<body>
+<div id="wrapper1">
+	one
+	<div class="wrapper2">two
+		<div class="wrapper3">three
+			<div class="wrapper4">four</div>
+			<div class="wrapper4">five</div>
+			<div class="wrapper4">six</div>
+			<div class="wrapper4">seven</div>
+		</div>
+		<div class="wrapper3">eight</div>
+		<div class="wrapper3">nine
+			<div class="wrapper4">ten</div>
+			<div class="wrapper4">eleven</div>
+		</div>
+	</div>
+	<div class="wrapper2">twelve
+		<div class="wrapper3">thirteen
+			<div class="wrapper4">forteen</div>
+			<div class="wrapper4">fifteen</div>
+			<div class="wrapper4">sixteen</div>
+		</div>
+		<div class="wrapper3">seventeen
+				<div class="wrapper4">eighteen<div id="wrapper5">five</div>
+				</div>
+				<div class="wrapper4">ninteen</div>
+		</div>
+	</div>
+	<div class="wrapper2">twenty</div>
+</div>
+<div class="clearfix">
+	<button>遍历不查询</button>
+	<input type="text" placeholder="请输入你要查询的"/>
+	<button>查询也遍历</button>
+</div>
+
+<script type="text/javascript">
+	function trim(seq) {
+		return seq.replace( /(^\s*)|(\s*$)|\r|\n/g , "")
+	}
+	function query(node) {
+		var seq = document.getElementsByTagName("input")[0].value;
+		if ( seq == null) return;
+		seq = trim(seq);
+		//var nodetext = node.innerText.indexOf(" ") ? node.innerText.split(" ") : node.innerText;
+		var nodetext = trim(node.firstChild.nodeValue);
+		if ( nodetext == seq ) {
+			node.style.backgroundColor = "red";
+			return true;
+		} else {
+			return false;
+		}
+	}
+	function each(node) {
+		var childs = node.childNodes;
+		var len = childs.length;
+		if (  len > 1 ) {
+			//如果子节点的个数大于1，表明除了文本节点之外还有元素节点,那就再使本函数迭代一次。
+			for ( var i=0; i<len; i++ ) {
+				if ( childs[i].nodeType == 1 ) {
+					each(childs[i]);
+				}
+			}
+			//当所有元素子节点遍历完成，把父节点添加到eleChildList
+			eleChildList.push(node);
+		} else {
+			//如果子节点个数不大于1，即只有一个节点，那就是文本节点，就可以直接把文本节点的父节点也就是node添加到eleChildList中。
+			eleChildList.push(node);
+		}
+	}
+	function colorChange(list) {
+		var i = 0;
+		var tagColor = false;
+		list[i].style.backgroundColor = "blue";
+		time = setInterval(function(){
+			i++;
+			if ( i < list.length ) {
+				list[i].style.backgroundColor = "blue";
+				if ( !tagColor ) {
+					//当query起作用时，使下一个背景颜色变化跳过query设置颜色那个元素。否则query设置颜色永远不起作用。
+					list[i-1].style.backgroundColor = "white";	
+				}
+				if ( tagQuery ) tagColor = query(list[i]);
+			} else {
+				list[list.length-1].style.backgroundColor = "white";
+				clearInterval(time);
+			}
+		}, 1000); 
+	}
+	function init() {
+		eleChildList = [];
+		each(wrapper);
+		clearInterval(time);
+	}
+	var eleChildList = [];
+	var wrapper = document.getElementById("wrapper1");
+	var buttons = document.getElementsByTagName("button");
+	var time;
+	var tag = false;//用来标明是否有查询。
+	buttons[0].onclick = function() {
+		init();
+		colorChange(eleChildList);
+	}
+	buttons[1].onclick = function() { 
+		init();
+		tagQuery = true;
+		colorChange(eleChildList);
+	}
+</script>
+</body>
+</html>
