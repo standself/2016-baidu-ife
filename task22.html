@@ -89,6 +89,10 @@
 
 
 	<script>
+	/* 在chrome、firefox、safari、opera都会使用空白（空格和回车）来创建文本节点。
+	 *所以wrapper的firstChild是空白文本。因此，wrapper1通过将相邻的闭合标签相互靠紧解决该问题；
+	 *而wrapper2则是通过创建firstNode和lastNode来获得第一个和最后一个非空子元素。
+	 */
 		var divWrapper1 = document.getElementById("wrapper1");
 		var divWrapper2 = document.getElementById("wrapper2");
 		var divList1 = [];
