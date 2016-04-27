@@ -67,12 +67,27 @@ div {
 		height: 390px;
 		border: 1px solid black;
 	}
+	.info p{
+		font-size: 7px;
+	}
 
 /*下方控制台*/
 .controller{
 	float: left;
-	margin-top: 40px;
+	margin-top: 20px;
 	width: 1020px;
-	height: 100px;
+	height: 70px;
 	border: 1px solid black;
 }
+	.controller>input{
+		float: left;
+		margin: 20px 15px 0px;
+	}
+	form{
+		border-left：1px solid black;
+		float: left;
+		margin-right: 14px;
+	}
+		form button{
+			margin-right: 15px;
+		}
