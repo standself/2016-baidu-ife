@@ -4,7 +4,7 @@ function Rocket(id) {
 	this.createDiv = function () {
 		var $rocket = $("<div/>"),
 			$energy = $("<div/>"),
-			$energy_rest = $("<div/>");
+			$energy_rest = $("<div>#"+this.id+"-100%"+"</div>");
 			$img = $("<img src='./image/rocket-active.png'/>");
 		$rocket.addClass("rocket");
 		$energy.addClass("energy");
@@ -29,8 +29,10 @@ function Rocket(id) {
 				clearInterval(energy_timer);
 				break;
 			case "destory":
-				$parent = $div.parentNode;
-				$parent.removeChild($div);
+				clearInterval(operate_timer);
+				clearInterval(energy_timer);
+				$div.remove();
+				rockets[this.id] = "";
 				break;
 			case "start":
 				operate_timer = setInterval(function(){
@@ -49,7 +51,8 @@ function Rocket(id) {
 		var $energy_rest = $("#"+this.id).find(".energy-rest");
 		var width = $energy_rest.css("width");
 		width = parseInt(width)*(1-0.1);
-		$energy_rest.text((width/40).toFixed(2)*100 + "%");
+		var name = this.id;
+		$energy_rest.text("#"+name+"-"+(width/40).toFixed(2)*100 + "%");
 		$energy_rest.css("width", width + "px");
 		if ( width < 12 ) {
 			clearInterval(operate_timer);
@@ -60,7 +63,7 @@ function Rocket(id) {
 				}
 				width = width*(1+0.1);
 				$energy_rest.css("width", width+"px");
-				$energy_rest.text((width/40).toFixed(2)*100 + "%");
+				$energy_rest.text("#"+name+"-"+(width/40).toFixed(2)*100 + "%");
 			},200);
 		}
 	};
@@ -78,18 +81,16 @@ function State(data) {
 	this.info_command = $(".info .info_command");
 	this.info_state = $(".info .info_state");
 	this.rocket = $("#"+this.id);
-	this.time = new Date();
-	this.time_str = this.time.getHours() + ":" + this.time.getMinutes() + ":" + this.time.getSeconds(); 
 	this.send = function() {
 		//往命令列表里面写命令;
 		if ( !data  ) return;
-		this.info_command.append($("<p>"+"rocket #"+this.id+": "+this.command+"</br>&nbsp;&nbsp;time:"+this.time_str+"</p>"));
+		this.info_command.prepend($("<p>"+"rocket #"+this.id+": "+this.command+"</br>&nbsp;&nbsp;time:"+getTime()+"</p>"));
 	};
 	this.recieved = function() {
 		//当对应id的火箭收到消息后，火箭根据消息运行。往火箭状态里面写状态，格式为：rocket #id ：state。如果丢包，就什么也不干。
-		if ( !data || !lost() ) return this.info_state.append($("<p>command lost!  time:"+this.time_str+"</p>"));
-		if ( this.rocket.length == 0 ) rockets[this.id].createDiv();
-		this.info_state.append($("<p>"+"Recieved!&nbsp;rocket #"+this.id+": "+this.command+"</br>&nbsp;&nbsp;time:"+this.time_str+"</p>"));
+		if ( !data || !lost() ) return this.info_state.prepend($("<p>command lost!</br>&nbsp;&nbsp;time:"+getTime()+"</p>"));
+		if ( this.rocket.length == 0 ) return alert("尚未创建 rocket"+this.id+"号！你不能执行此操作。");
+		this.info_state.prepend($("<p>"+"Recieved!&nbsp;rocket #"+this.id+": "+this.command+"</br>&nbsp;&nbsp;time:"+getTime()+"</p>"));
 		rockets[this.id].command = this.command;
 		rockets[this.id].operate();
 	};
@@ -103,6 +104,7 @@ function State(data) {
 //控制台
 function controller() {
 	var $formbtn = $("button");
+	var $input = $("input");
 	$formbtn.on("click",function(e){
 		var event = document.event || e;
 		var target = event.target || event.srcElement;
@@ -112,12 +114,31 @@ function controller() {
 		data.id = parentClass[parentClass.length-1];
 		data.command = command;  
 		state = new State(data);
+		state.send();
 		state.recieved();
 	});
+	$input.on("click", function(){
+		for (attr in rockets) {
+			console.log("attr:"+attr);
+			if ( rockets[attr] == "") {
+				rockets[attr] = new Rocket(attr);
+				rockets[attr].createDiv(attr);
+				data.id = attr;
+				data.command = "stop";
+				$(".info .info_command").prepend($("<p>"+"new rocket: #"+attr+"</br>&nbsp;&nbsp;time:"+getTime()+"</p>"));
+				break;
+			}
+		}
+	});
+}
+function getTime(){
+	var time = new Date();
+	var time_str = time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds(); 
+	return time_str;
 }
 var data = {
-	id: "2",
-	command: "start"
+	id: "",
+	command: ""
 };
 /*rockets = {
  *	"1": new Rocket("1"),
@@ -125,15 +146,10 @@ var data = {
  *}
  */
 var rockets = {
-
-    "2": new Rocket("2"),
+	"1": "",
+    "2": "",
+    "3": "",
+    "4": "",
 };
-/*rockets["2"].createDiv();
-rockets["2"].operate();
-rockets["2"].command = "start";//state要改这里的状态。
-rockets["2"].operate();*/
 controller();
-var state = new State(data);
-state.recieved();
-
 });

@@ -46,9 +46,10 @@ div {
 				height: 20px;
 				width: 40px;
 				color: white;
-				font-size: 10px;
+				font-size: 5px;
 				text-align: center;
 				background-color: red;
+				word-wrap: no-wrap; 
 			}
 		.rocket img{
 			margin-top: 5px;
@@ -64,8 +65,9 @@ div {
 }
 	.info .info_state, .info .info_command{
 		width: 200px;
-		height: 390px;
+		height: 380px;
 		border: 1px solid black;
+		overflow: auto;
 	}
 	.info p{
 		font-size: 7px;
@@ -74,19 +76,25 @@ div {
 /*下方控制台*/
 .controller{
 	float: left;
-	margin-top: 20px;
 	width: 1020px;
 	height: 70px;
 	border: 1px solid black;
 }
+	.controller div{
+		height: 70px;
+		line-height: 70px;
+		width: 70px;
+		float: left;
+	}
 	.controller>input{
 		float: left;
 		margin: 20px 15px 0px;
 	}
 	form{
-		border-left：1px solid black;
+		border-left: 1px solid black;
 		float: left;
 		margin-right: 14px;
+		margin-top: 20px;
 	}
 		form button{
 			margin-right: 15px;
