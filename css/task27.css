@@ -1,0 +1,130 @@
+body, div, span, li, ul, p, h1, h2, h3, img {
+	padding: 0px;
+	margin: 0px;
+}
+div {
+	box-sizing: border-box;
+	border-radius: 5px;
+}
+/*外部框架：界面居中*/
+.wrapper{
+	width: 1022px;
+	height: 870px;
+	float: left;
+}
+
+/*左边图形区域*/
+.interface{
+	width: 800px;
+	height: 800px;
+	float: left;
+	background-color: black;
+	margin-right: 20px;
+	position: relative;
+}
+	.interface img#earth{
+		position: absolute;
+		left: 380px;
+		top: 380px;
+		width: 40px;
+		height: 40px;
+		padding: 0px;
+		margin: 0px;
+	}
+	.rocket{
+		position: absolute;
+		left: 260px;
+		top: 360px;
+		width: 80px;
+		height: 80px;
+	}
+		.rocket .energy{
+			width: 40px;
+			height: 20px;
+		}
+			.rocket .energy-rest{
+				height: 20px;
+				width: 40px;
+				color: white;
+				font-size: 5px;
+				text-align: center;
+				background-color: red;
+				word-wrap: no-wrap; 
+			}
+		.rocket img{
+			margin-top: 5px;
+			width: 40px;
+			height:60px;
+			src: "./image/rocket-active.png";
+		}
+
+/*右边消息栏*/
+.info{
+	float: left;
+	width: 200px;
+	height: 800px;
+}
+	.info .info_state, .info .info_command{
+		width: 200px;
+		height: 150px;
+		border: 1px solid black;
+		overflow: auto;
+	}
+	.nowState{
+		border: 1px solid black;
+		width: 200px;
+		height: 290px;
+	}
+		.info .nowState td, .info .nowState th{
+			font-size: 7px;
+			width: 48px;
+		}
+	.info p{
+		font-size: 7px;
+	}
+	.info form{
+		width:200px;
+		font-size: 7px;
+	}
+
+
+/*下方控制台*/
+.controller{
+	float: left;
+	width: 1020px;
+	height: 70px;
+	border: 1px solid black;
+}
+	.controller div{
+		height: 70px;
+		line-height: 70px;
+		width: 70px;
+		float: left;
+	}
+	.controller>input{
+		float: left;
+		margin: 20px 15px 0px;
+	}
+	.controller form{
+		border-left: 1px solid black;
+		float: left;
+		margin-right: 14px;
+		margin-top: 20px;
+	}
+		form button{
+			margin-right: 15px;
+		}
+
+/*右方的广播栏*/
+.cast{
+	width: 200px;
+	height: 870px;
+	overflow: auto;
+	margin-left: 20px;
+	float:left;
+}
+	.cast fieldset{
+		width: 80%;
+		height: 96%;
+		overflow: auto;
+	}

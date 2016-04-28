@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>task26</title>
+	<link rel="icon" href="..">
+	<link rel="stylesheet" href="./css/task27.css" />
+	<script type="text/javascript" src="./javascript/jquery-2.2.3.js"></script>
+	<script type="text/javascript" src="./javascript/task27.js"></script>
+	<meta charset="utf-8" />
+</head>
+<body>
+	<div class="wrapper">
+		<div class="interface">
+			<img id="earth" src="./image/earth.png" alt="earth picture" />
+		<!--  火箭结构
+			<div class="rocket">
+				<div class="energy">
+					<div class="energy-rest"></div>
+				</div>
+				<img src="./image/rocket-active.png" alt="rocket picture" />
+			</div>
+		-->
+		</div>
+		<div class="info">
+			<legend>火箭命令接收:</legend>
+			<div class="info_state"></div>
+			<legend>控制台命令列表:</legend>
+			<div class="info_command"></div>
+			<div class="nowState">
+				<table border="1">
+					<thead>现有火箭状态列表</thead>
+					<tbody>
+						<tr><th>编号</th><th>型号</th><th>动力</th><th>状态</th></tr>
+					</tbody>
+				</table>
+			</div>
+			<form class="model">
+				<fieldset>
+				<legend>火箭类型选择</legend>
+					<input type="radio" name="model" value="model1" checked="checked" />普通火箭(10px/s)<br/>
+					<input type="radio" name="model" value="model2"/>一级火箭(50px/s)<br/>
+					<input type="radio" name="model" value="model3"/>二级火箭(200px/s)<br/>
+				</fieldset>	
+			</form>
+			<form class="attenuation">
+				<fieldset>
+				<legend>火箭动力选择(衰减,充能)</legend>
+					<input type="radio" name="attenuation" value="atten1"  checked="checked"/>普通燃料(-10%/s,+4%/s)<br />
+					<input type="radio" name="attenuation" value="atten2"/>核动力(-5%/s,+6%/s)<br/>
+					<input type="radio" name="attenuation" value="atten3"/>曲径飞船(-1%/s,+10%/s)<br/>
+				</fieldset>	
+			</form>
+		</div>
+		<div class="controller">
+			<div>控制台：</div>
+			<input type="button" value="new"/>
+			<form class="rocket1">
+				<legend>火箭1号</legend>
+				<button type="button">start</button><button type="button">stop</button><button type="button">destory</button>
+			</form>
+			<form class="rocket2">
+				<legend>火箭2号</legend>
+				<button type="button">start</button><button type="button">stop</button><button type="button">destory</button>
+			</form>
+			<form class="rocket3">
+				<legend>火箭3号</legend>
+				<button type="button">start</button><button type="button">stop</button><button type="button">destory</button>
+			</form>
+			<form class="rocket4">
+				<legend>火箭4号</legend>
+				<button type="button">start</button><button type="button">stop</button><button type="button">destory</button>
+			</form>
+		</div>
+	</div>
+	<div class="cast">
+		<fieldset>
+			<legend>火箭广播</legend>
+		</fieldset>
+	</div>
+</body>
+</html>
