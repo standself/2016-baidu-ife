@@ -6,6 +6,7 @@ function Rocket(id, model, atten) {
 	this.atten = atten;
 	var operate_timer;
 	var energy_timer;
+	var bus_timer;
 	var deg = 0;//运行的位置存储，旋转的角度。
 	var that = this;//用于同一对象内部各方法的相互调用.
 	//火箭运行
@@ -28,7 +29,7 @@ function Rocket(id, model, atten) {
 	this.operate = function () {
 		var operate_model = getModel(that.model) || 500; // 如果没设置运行速度，就默认为1;
 		var $div = $("#"+this.id);
-		switch (this.command){
+		switch (that.command){
 			case "stop":
 				clearInterval(operate_timer);
 				clearInterval(energy_timer);
@@ -36,15 +37,16 @@ function Rocket(id, model, atten) {
 			case "destory":
 				clearInterval(operate_timer);
 				clearInterval(energy_timer);
+				clearInterval(bus_timer);
 				$div.remove();
-				rockets[this.id] = "";
+				rockets[that.id] = "";
 				break;
 			case "start":
 				operate_timer = setInterval(function(){
 					deg = deg + 10;
 					$div.css({
 						"transform": "rotate("+deg+"deg)",
-						"transform-origin": "140px 40px",
+						"transform-origin": "140px 40px"
 					});
 					that.energy();
 				}, operate_model);
@@ -58,7 +60,6 @@ function Rocket(id, model, atten) {
 		var $energy_rest = $("#"+this.id).find(".energy-rest");
 		var width = $energy_rest.css("width");
 		width = parseInt(width)*(1-attenuation[0]);//在原来的基础上自减；
-		console.log("attenuation[0]:"+attenuation[0]+"  width"+width);
 		var name = this.id;
 		$energy_rest.text("#"+name+"-"+(width/40).toFixed(2)*100 + "%");
 		$energy_rest.css("width", width + "px");
@@ -72,13 +73,13 @@ function Rocket(id, model, atten) {
 				width = width*(1+attenuation[1]);//自增；
 				$energy_rest.css("width", width+"px");
 				$energy_rest.text("#"+name+"-"+(width/40).toFixed(2)*100 + "%");
-			},200);
+			},400);
 		}
 	};
 	this.bus = function() {
 		var podcast = $(".cast fieldset");
 		var	bus_adpater;
-		var bus_timer = setInterval(function(){
+		bus_timer = setInterval(function(){
 			bus_adpater = new Adpater();
 			var podcast_text = bus_adpater.binary(that.id, that.model, that.atten);
 		podcast.append("<p>广播："+podcast_text+"</p>");
@@ -102,20 +103,20 @@ function State(data) {
 	this.send = function() {
 		//往命令列表里面写命令;
 		if ( !data  ) return;
-		this.info_command.prepend($("<p>"+"rocket #"+this.id+": "+this.command+"</br>&nbsp;&nbsp;time:"+getTime()+"</p>"));
+		that.info_command.prepend($("<p>"+"rocket #"+that.id+": "+that.command+"</br>&nbsp;&nbsp;time:"+getTime()+"</p>"));
 	};
 	this.recieved = function() {
 		//当对应id的火箭收到消息后，火箭根据消息运行。往火箭状态里面写状态，格式为：rocket #id ：state。如果丢包，就什么也不干。
 		if ( !data || !lost() ) {
 			this.info_state.prepend($("<p>command lost!</br>&nbsp;&nbsp;time:"+getTime()+"</br>&nbsp;&nbsp;send again!</p>"));
 			var timer = setTimeout(function(){
-				return that.recieved();
+				return that.recieved(); 
 			}, 2000);
 		}
-		if ( this.rocket.length == 0 )  alert("尚未创建 rocket"+this.id+"号！你不能执行此操作。");
-		this.info_state.prepend($("<p>"+"Recieved!&nbsp;rocket #"+this.id+": "+this.command+"</br>&nbsp;&nbsp;time:"+getTime()+"</p>"));
-		rockets[this.id].command = this.command;
-		rockets[this.id].operate();
+		if ( that.rocket.length == 0 )  return alert("尚未创建 rocket"+that.id+"号！你不能执行此操作。");
+		that.info_state.prepend($("<p>"+"Recieved!&nbsp;rocket #"+that.id+": "+that.command+"</br>&nbsp;&nbsp;time:"+getTime()+"</p>"));
+		rockets[that.id].command = that.command;
+		rockets[that.id].operate();
 	};
 	function lost() {
 		//就取随机数，在某个范围（0.3以内）	的就表示成丢包false；不传递。
@@ -133,7 +134,6 @@ function controller() {
 		var target = event.target || event.srcElement;
 		var parentClass = target.parentNode.className;
 		var command = target.innerText;
-		console.log(command);
 		data.id = parentClass[parentClass.length-1];
 		data.command = command;  
 		state = new State(data);
@@ -182,17 +182,15 @@ function Adpater(){
 		"atten3": 3
 	}; 
 	this.binary = function(id, model, atten) {
-		var energy_rest = parseInt($("#"+id).find(".energy-rest").css("width")).toString(2);
-		for( var i=8;i>energy_rest.length; i--) {
-			energy_rest = "0" + energy_rest;
-		}
-		console.log("binary:rest---"+energy_rest);
-		var rocket_id = parseInt(id).toString(2);
-		model = models[model].toString(2);
-		atten = attens[atten].toString(2);
-		console.log("binary:atten---"+atten);
+		var energy_rest = parseInt($("#"+id).find(".energy-rest").css("width"));
+		energy_rest = toBinary(energy_rest, 8);
+		var rocket_id = parseInt(id);
+		rocket_id = toBinary(rocket_id, 4);
+		model = models[model];
+		atten = attens[atten];
+		model = toBinary(model, 4);
+		atten = toBinary(atten, 4);
 		data_center[id] =  rocket_id+model+atten+energy_rest;
-		console.log(data_center[id]);
 		return data_center[id];
 	}
 	this.dispaly = function() {
@@ -242,10 +240,17 @@ function getAtten(atten){
 			atten = [0.05, 0.1];
 			break;
 	}
-	console.log("atten:"+atten);
 	return atten;
 }
 
+//将数字变成指定位数的二进制字符
+function toBinary(num, len){
+	var str = num.toString(2);
+	while( str.length<len ) {
+		str = "0" + str;
+	}
+	return str;
+}
 var data = {
 	id: "",
 	command: ""
