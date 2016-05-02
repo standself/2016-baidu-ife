@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>task 32</title>
+	<meta charset="utf-8" />
+	<link rel="icon" href="./image/bx-32X32.ico"/>
+</head>
+<body>
+	<form class="form">
+		<fieldset>
+			<legend>打造你的专有表单</legend>
+			<div class="inputType">
+				<label for="inputType">表单类型：</label>
+				<input type="radio" name="inputType"/>输入框
+				<input type="radio" name="inputType"/>单选框
+				<input type="radio" name="inputType"/>复选框
+				<input type="radio" name="inputType"/>下拉框
+				<input type="radio" name="inputType"/>文本域
+			</div>
+			<div class="inputLabel">
+				<label for="inputLable">表单名字：</label>
+				<input type="text" name="inputLabel" placeholder="请输入你的表单项名字" /><br />
+				<label for="inputChoice">表单类型：</label>
+				<input type="radio" name="inputChoice">用户名
+				<input type="radio" name="inputChoice">密码
+				<input type="radio" name="inputChoice">邮箱
+				<input type="radio" name="inputChoice">手机<br />
+				<label for="inputLength">长度限制：</label><br />
+				最短：<input type="number" max="10" min="1" value="1"/>最长：<input type="number" max="20" min="10" value="10"/>
+			</div>
+			<div class="options">
+				<label for="options">表单内容：</label>
+				<input type="text" name="inputOptions" placeholder="请输入你的表单内容" />
+			</div>
+			<div class="textarea">
+				<label for="textarea">长度限制：</label>
+				<input type="range" name="textarea" min="1" max="500" /><span>200</span>
+			</div>
+		</fieldset>
+	</form>
+</body>
+</html>
