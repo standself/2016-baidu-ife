@@ -82,7 +82,8 @@ function Rocket(id, model, atten) {
 		bus_timer = setInterval(function(){
 			bus_adpater = new Adpater();
 			var podcast_text = bus_adpater.binary(that.id, that.model, that.atten);
-		podcast.append("<p>广播："+podcast_text+"</p>");
+			podcast.append("<p>广播："+podcast_text+"</p>");
+			bus_adpater.dispaly();
 		},2000);
 	}
 }
@@ -195,18 +196,17 @@ function Adpater(){
 	}
 	this.dispaly = function() {
 		var table_state = $(".nowState tbody");
-		var table_state_firstChild = table_state.firstChild;
+		var table_state_firstChild = $("<tr><th>编号</th><th>型号</th><th>动力</th><th>状态</th></tr>");
 		table_state.empty().append(table_state_firstChild);
 		for ( attr in data_center ) {
-			var id = data_center[attr],
-				model, atten, energy_rest;
-				for ( attrModel in this.models ) {
-					if ( data_center.substr(4,4) == thi.models[attrModel] ) model = attrModel;
+			var id = attr, model, atten, energy_rest;
+			for ( attrModel in models ) {
+					if ( data_center[attr].substr(4,4) == toBinary(models[attrModel], 4) ) model = attrModel;
 				}
-				for ( attrAtten in this.attens ) {
-					if ( data_center.substr(8,4) == thi.attens[attrAtten] ) atten = attrAtten;
+				for ( attrAtten in attens ) {
+					if ( data_center[attr].substr(8,4) == toBinary(attens[attrAtten], 4) ) atten = attrAtten;
 				}
-				energy_rest = parseFloat(data_center.substr(12,4)).toFixed(2)*100 + "%";
+				energy_rest = parseFloat(data_center[attr].substr(12,4)).toFixed(2)*100 + "%";
 				table_state.append("<tr><td>"+id+"</td><td>"+model+"</td><td>"+atten+"</td><td>"+energy_rest+"</td></tr>");
 		}
 	}
