@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>task29</title>
+	<meta charset="utf-8"/>
+	<style type="text/css">
+		fieldset {
+			line-height: 50px;
+		}
+		.input {
+			line-height: 30px;
+			width: 250px;
+			height: 30px;
+			border-radius: 5px;
+		}
+		.btn {
+			width: 40px;
+			height: 30px;
+			border-radius: 5px;
+		}
+	</style>
+</head>
+<body>
+	<div id="form-wrapper">
+		<form>
+			<legend>task29</legend>
+			<fieldset>
+				<label for="username">用户名：</label>
+				<input type="text" name="username" class="input" id="username" placeholder="必填，4-16个字符"><input type="button" class="btn" value="验证"/><br />
+				<label for="password">密&nbsp;码：</label>
+				<input type="text" name="password" class="input" id="password" placeholder="必填，4-16个字符"><input type="button" class="btn" value="验证"/><br />
+				<label for="phone">电&nbsp;话：</label>
+				<input type="text" name="phone" class="input" id="phone" placeholder="选填"><input type="button" class="btn" value="验证"/><br />
+			</fieldset>
+		</form>
+	</div>
+	<script type="text/javascript">
+		var $ = function(id) {
+			return document.getElementById(id);
+		}
+		var username = $("username");
+		var password = $("password");
+		var phone = $("phone");
+		function checkStrLen(str) {
+			var len = 0,
+				length = str.length;
+			for ( var i = 0; i < length; i++ ) {
+				if ( str.charCodeAt(str[i]) > 255 ) {
+					len += 2;
+				} else {
+					len += 1;
+				}
+			}
+			return len;
+		}
+		var fieldset = document.getElementsByTagName("fieldset")[0];
+		fieldset.onkeyup = function(e) {
+			var e = e || document.event,
+				target = e.target || e.srcElement,
+				str = target.value,
+				len = checkStrLen(str);
+			var span = document.createElement("span");
+			if ( target.nextSibling.nextSibling.nodeName.toLowerCase() == "span") {
+				console.log("nextSibling:",target.nextSibling);
+				console.log("nextSibling.nextSibling:",target.nextSibling.nextSibling);
+				target.parentNode.removeChild(target.nextSibling.nextSibling);
+			}
+			if ( len < 4 || len > 16 ) {
+				if ( len == 0 ) {
+					span.innerHTML = "<br />&nbsp;&nbsp;&nbsp;&nbsp;输入不能为空";
+				} else {
+					span.innerHTML = "<br />&nbsp;&nbsp;&nbsp;&nbsp;请输入4-16个字符长度";
+				}
+				target.style.borderColor = "red";
+			} else {
+				span.innerHTML = "<br />&nbsp;&nbsp;&nbsp;&nbsp;输入正确";
+				target.style.borderColor = "blue";
+			}
+			target.parentNode.insertBefore(span,target.nextSibling.nextSibling);
+		}
+	</script>
+</body>
+</html>
