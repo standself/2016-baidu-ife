@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>task 33</title>
+	<meta charset="utf-8"/>
+	<style>
+		#wrapper {
+			width: 440px;
+			height: 440px;
+			box-sizing: border-box;
+			position: relative;
+		}
+		#wrapper .div {
+			font-size: 38px;
+			line-height: 40px;
+			text-align: center;
+			box-sizing: border-box;
+			width: 40px;
+			height: 40px;
+			float: left;
+		}
+		#aim {
+			width: 40px;
+			height: 40px;
+			position: absolute;
+			left: 80px;
+			top: 80px;
+			background-color: red;
+		}
+		#aim div{
+			margin: 0px;
+			width: 40px;
+			background-color: blue;
+			height: 10px;
+		}
+		#action {
+			clear: both;
+			margin: 40px 0px 0px 40px;
+		}
+	</style>
+</head>
+<body>
+<div id="wrapper">
+	<div id="aim"><div></div></div>
+</div>
+<div id="action">
+	<input type="text" value="GO"></input><button>行动</button><br>
+	<ul>
+		<li>TURN LEFT : 方块左转</li>
+		<li>TURN RIGHT : 方块右转</li>
+		<li>TURN BACK : 方块后转</li>
+		<li>GO : 方块前进一格</li>
+		<li>不区分大小写</li>
+	</ul>
+</div>
+
+<script type="text/javascript">
+	//渲染表格
+	var len = 11,
+		wrapper = document.getElementById("wrapper");
+	for( var i = 0; i < len; i++ ) {
+		for( var j = 0; j < len; j++ ) {
+			var div = document.createElement("div");
+			div.setAttribute("class", "div");
+			div.style.borderBottom = "1px solid grey";
+			div.style.borderRight = "1px solid grey";
+			if ( i == 0 && j == 0 ) {
+				div.style.borderBottom = "";
+				div.style.borderRight = ""
+			}
+			if ( i == 0 && j != 0 ) {
+				div.innerText = j;
+				div.style.borderBottom = "1px solid red";
+				div.style.borderRight = ""
+			}
+			if ( j == 0 && i != 0 ) {
+				div.innerText = i;
+				div.style.borderBottom = "";
+				div.style.borderRight = "1px solid red";
+			}
+			if ( j == len -1 && i != 0) {
+				div.style.borderBottom = "1px solid grey";
+				div.style.borderRight = "1px solid red";
+			}
+			if ( j != 0 && i == len -1 ) {
+				div.style.borderBottom = "1px solid red";
+				div.style.borderRight = "1px solid grey";
+				if ( j == len -1 ) div.style.borderRight = "1px solid red";
+			}
+			wrapper.appendChild(div);
+		}
+	}
+
+	//响应事件
+	var aim = document.getElementById("aim"),
+		btn = document.getElementsByTagName("button")[0],
+		//用户输入指令存储
+		value,
+		//格子的运动方向, 0, 1, 2, 3分别对应着左上右下.变向就加减1或2，再对4取模。
+		turn = 1,
+		degs = 0;
+		btn.onclick = function() {
+			value = document.getElementsByTagName("input")[0].value;
+			value = value.replace(/^\s+|\s+$/g, "").toUpperCase();
+			console.log(value);
+			switch (value) {
+				case "TURN LEFT":
+					turn =  (turn - 1) % 4;
+					degs = degs - 90;
+					aim.style.transform = "rotate(" + degs + "deg)";
+					break;
+				case "TURN RIGHT":
+					turn = (turn + 1) % 4;
+					degs = degs + 90;
+					aim.style.transform = "rotate(" + degs + "deg)";
+					break;
+				case "TURN BACK":
+					turn = (turn + 2) % 4;
+					degs = degs + 180;
+					aim.style.transform = "rotate(" + degs + "deg)";
+					break;
+				case "GO":
+					move(aim, turn);
+					break;
+			}
+		}
+
+		function move(aim, turn) {
+			//由于aim.style.left若是left没在div中直接定义，就无法这样取，只能通过getComputedStyle来获得style里面的样式。
+			switch (turn) {
+				case 0:
+					aim.style.left = parseInt(getComputedStyle(aim, false)["left"]) - 40 + "px";
+					break;
+				case 1: 
+					aim.style.top = parseInt(getComputedStyle(aim, false)["top"]) - 40 + "px";
+					break;
+				case 2:
+					aim.style.left = parseInt(getComputedStyle(aim, false)["left"]) + 40 + "px";
+					break;
+				case 3:
+					aim.style.top = parseInt(getComputedStyle(aim, false)["top"]) + 40 + "px";
+					break;
+			}
+			console.log(parseInt(aim.style.top));
+			if ( parseInt(aim.style.top) < 40 || parseInt(aim.style.top) > 400 || parseInt(aim.style.left) < 40 || parseInt(aim.style.left) > 400 ) {
+				alert("移动不能超出格子空间");
+				window.location.reload();
+			}
+		}
+</script>
+</body>
+</html>

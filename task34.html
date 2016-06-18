@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>task 34</title>
+	<meta charset="utf-8"/>
+	<style>
+		#wrapper {
+			width: 440px;
+			height: 440px;
+			box-sizing: border-box;
+			position: relative;
+		}
+		#wrapper .div {
+			font-size: 38px;
+			line-height: 40px;
+			text-align: center;
+			box-sizing: border-box;
+			width: 40px;
+			height: 40px;
+			float: left;
+		}
+		#aim {
+			width: 40px;
+			height: 40px;
+			position: absolute;
+			left: 80px;
+			top: 80px;
+			background-color: red;
+			transform: rotateZ(0deg);
+			transition: all 0.5s;
+		}
+		#aim div{
+			margin: 0px;
+			width: 40px;
+			background-color: blue;
+			height: 10px;
+		}
+		#action {
+			clear: both;
+			margin: 40px 0px 0px 40px;
+		}
+	</style>
+</head>
+<body>
+<div id="wrapper">
+	<div id="aim"><div></div></div>
+</div>
+<div id="action">
+	<input type="text" value="mov right"></input><button>行动</button><br>
+	<ul>考虑的是css3的某些属性的使用。指令如下：
+		<li>tra left: 方块左移一格&nbsp;&nbsp;&nbsp;&nbsp;mov left: 方块向左变向且移一格</li>
+		<li>tra top: 方块左移一格&nbsp;&nbsp;&nbsp;&nbsp;      mov top: 方块向上变向且移一格</li>
+		<li>tra right: 方块左移一格&nbsp;&nbsp;&nbsp; mov right: 方块向右变向且移一格</li>
+		<li>tra bottom: 方块左移一格&nbsp;&nbsp;&nbsp;mov bottom: 方块向下变向且移一格</li>
+		<li>不区分大小写</li>
+	</ul>
+</div>
+
+<script type="text/javascript">
+	//渲染表格
+	var len = 11,
+		wrapper = document.getElementById("wrapper");
+	for( var i = 0; i < len; i++ ) {
+		for( var j = 0; j < len; j++ ) {
+			var div = document.createElement("div");
+			div.setAttribute("class", "div");
+			div.style.borderBottom = "1px solid grey";
+			div.style.borderRight = "1px solid grey";
+			if ( i == 0 && j == 0 ) {
+				div.style.borderBottom = "";
+				div.style.borderRight = ""
+			}
+			if ( i == 0 && j != 0 ) {
+				div.innerText = j;
+				div.style.borderBottom = "1px solid red";
+				div.style.borderRight = ""
+			}
+			if ( j == 0 && i != 0 ) {
+				div.innerText = i;
+				div.style.borderBottom = "";
+				div.style.borderRight = "1px solid red";
+			}
+			if ( j == len -1 && i != 0) {
+				div.style.borderBottom = "1px solid grey";
+				div.style.borderRight = "1px solid red";
+			}
+			if ( j != 0 && i == len -1 ) {
+				div.style.borderBottom = "1px solid red";
+				div.style.borderRight = "1px solid grey";
+				if ( j == len -1 ) div.style.borderRight = "1px solid red";
+			}
+			wrapper.appendChild(div);
+		}
+	}
+
+	//响应事件
+	var aim = document.getElementById("aim"),
+		btn = document.getElementsByTagName("button")[0];
+
+
+	/***
+	 * @param aim 	运动元素
+	 ***/
+	function Action(aim) {
+		//用户输入的值，初始的方块方向（角度为0代表向上。）turns代表转向，directs代表前进的方向。
+		var value,
+			turns = {
+				"left": -1,
+				"right": 1,
+				"top": 0,
+				"bottom": 2
+			},
+			directs = {
+				left: 0,
+				top: 1,
+				right: 2,
+				bottom: 3
+			};
+
+		var move = function() {
+			var direct = value[1] && directs[value[1]];
+			switch (direct) {
+				case 0:
+					aim.style.left = parseInt(getComputedStyle(aim, false)["left"]) - 40 + "px";
+					break;
+				case 1: 
+					aim.style.top = parseInt(getComputedStyle(aim, false)["top"]) - 40 + "px";
+					break;
+				case 2:
+					aim.style.left = parseInt(getComputedStyle(aim, false)["left"]) + 40 + "px";
+					break;
+				case 3:
+					aim.style.top = parseInt(getComputedStyle(aim, false)["top"]) + 40 + "px";
+					break;
+			}
+		};
+
+		var changeDirect = function() {
+			var turn = value[1] && turns[value[1]], degs = 0;
+			degs = degs + turn * 90;
+			aim.style.transform = "rotateZ(" + degs + "deg)";
+		};
+
+		var getValue = function() {
+			value = document.getElementsByTagName("input")[0].value;
+			value = value.replace(/^\s+|\s+$/g, "").toLowerCase().split(" ");
+			return value;
+		};
+
+		var validate = function() {
+			if ( parseInt(aim.style.top) < 40 || parseInt(aim.style.top) > 400 || parseInt(aim.style.left) < 40 || parseInt(aim.style.left) > 400 ) {
+				alert("移动不能超出格子空间");
+				window.location.reload();
+			}
+		};
+
+		return {
+			getValue: getValue,
+			move: move,
+			changeDirect: changeDirect,
+			validate: validate
+		};
+	}
+
+	var action = new Action(aim);
+	btn.onclick = function() {
+		if ( action.getValue() ) {
+			var value = action.getValue();
+			if ( "tra" === value[0] ) {
+				action.move();
+				action.validate();
+			} else if ( "mov" === value[0] ) {
+				action.changeDirect();
+				action.move();
+				action.validate();
+			} else {
+				alert("请输入正确的指令。");
+				window.location.reload();
+			}
+		}
+	}
+</script>
+</body>
+</html>
