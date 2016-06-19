@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>task 35</title>
+	<meta charset="utf-8"/>
+	<link rel="stylesheet" type="text/css" href="./css/task35.css"/>
+</head>
+<body>
+<div id="wrapper">
+	<div id="aim"><div></div></div>
+</div>
+<div id="action">
+	<button>行动</button><button>刷新</button><br>
+	<div id="line-num">
+		<div><div class="line-div">1</div></div>
+		<textarea></textarea><br>
+	</div>
+	<ul>考虑的是css3的某些属性的使用。指令格式为：actType direction length。示例如下：
+		<li>tra left 1: 方块左移一格&nbsp;&nbsp;&nbsp;&nbsp;mov left: 方块向左变向且移一格</li>
+		<li>tra top 2: 方块左移2格&nbsp;&nbsp;&nbsp;&nbsp;      mov top: 方块向上变向且移一格</li>
+		<li>tra right 3: 方块左移3格&nbsp;&nbsp;&nbsp; mov right: 方块向右变向且移一格</li>
+		<li>tra bottom 4: 方块左移4格&nbsp;&nbsp;&nbsp;mov bottom: 方块向下变向且移一格</li>
+		<li>不区分大小写</li>
+	</ul>
+</div>
+
+<script type="text/javascript">
+	/***
+	 * @name 渲染表格函数
+	 * @param 	len 	表格的行列数
+	 ***/
+	function render(len) {
+		wrapper = document.getElementById("wrapper");
+		for( var i = 0; i < len; i++ ) {
+			for( var j = 0; j < len; j++ ) {
+				var div = document.createElement("div");
+				div.setAttribute("class", "div");
+				div.style.borderBottom = "1px solid grey";
+				div.style.borderRight = "1px solid grey";
+				if ( i == 0 && j == 0 ) {
+					div.style.borderBottom = "";
+					div.style.borderRight = ""
+				}
+				if ( i == 0 && j != 0 ) {
+					div.innerText = j;
+					div.style.borderBottom = "1px solid red";
+					div.style.borderRight = ""
+				}
+				if ( j == 0 && i != 0 ) {
+					div.innerText = i;
+					div.style.borderBottom = "";
+					div.style.borderRight = "1px solid red";
+				}
+				if ( j == len -1 && i != 0) {
+					div.style.borderBottom = "1px solid grey";
+					div.style.borderRight = "1px solid red";
+				}
+				if ( j != 0 && i == len -1 ) {
+					div.style.borderBottom = "1px solid red";
+					div.style.borderRight = "1px solid grey";
+					if ( j == len -1 ) div.style.borderRight = "1px solid red";
+				}
+				wrapper.appendChild(div);
+			}
+		}
+	}
+	render(11);
+
+	/***
+	 * @param aim 	运动元素
+	 ***/
+	function Action(aim) {
+		//用户输入的值，初始的方块方向（角度为0代表向上。）turns代表转向，directs代表前进的方向。
+		var turns = {
+				"left": -1,
+				"right": 1,
+				"top": 0,
+				"bottom": 2
+			},
+			directs = {
+				left: 0,
+				top: 1,
+				right: 2,
+				bottom: 3
+			};
+
+		var move = function(command) {
+			var direct = command[1] && directs[command[1]];
+			var len = command[2] || 1;
+			switch (direct) {
+				case 0:
+					aim.style.left = parseInt(getComputedStyle(aim, false)["left"]) - 40 * len + "px";
+					break;
+				case 1: 
+					aim.style.top = parseInt(getComputedStyle(aim, false)["top"]) - 40 * len + "px";
+					break;
+				case 2:
+					aim.style.left = parseInt(getComputedStyle(aim, false)["left"]) + 40 * len + "px";
+					break;
+				case 3:
+					aim.style.top = parseInt(getComputedStyle(aim, false)["top"]) + 40 * len + "px";
+					break;
+			}
+		};
+
+		var changeDirect = function(command) {
+			var turn = command[1] && turns[command[1]], degs = 0;
+			degs = degs + turn * 90;
+			aim.style.transform = "rotateZ(" + degs + "deg)";
+		};
+
+		var getValue = function(str, sepatator) {
+			value = str.replace(/^\s+|\s+$/g, "").toLowerCase().split(sepatator);
+			return value;
+		};
+
+		var validateLimit = function() {
+			if ( parseInt(aim.style.top) < 40 || parseInt(aim.style.top) > 400 || parseInt(aim.style.left) < 40 || parseInt(aim.style.left) > 400 ) {
+				alert("移动不能超出格子空间");
+				window.location.reload();
+			}
+		};
+
+		return {
+			getValue: getValue,
+			move: move,
+			changeDirect: changeDirect,
+			validate: validateLimit
+		};
+	}
+
+	function validateCmd(cmd) {
+		var act, direct, num;
+		if ( Object.prototype.toString.call(cmd) == "[object Array]" ) {
+			act = cmd[0].toLowerCase();
+			direct = cmd[1].toLowerCase();
+			num = parseInt(cmd[2]);
+			if ( "left right top bottom".indexOf(direct) == -1 || "mov tra".indexOf(act) == -1 ) return false;
+			else if ( num && num == NaN ) return false;
+			else return true; 
+		}
+	}
+	var	aim = document.getElementById("aim"),
+		btns = document.getElementsByTagName("button"),
+		textArea = document.getElementsByTagName("textarea")[0],
+		lines = document.getElementById("line-num").getElementsByTagName("div")[0];
+	//获得运动元素对应的运动对象。
+	var action = new Action(aim);
+
+	//文本框的输入事件。
+	textArea.onkeypress = function(e) {
+		e = e || window.event;
+		if ( e && e.keyCode == 13) {
+			div = document.createElement("div");
+			var num = lines.getElementsByTagName("div").length;
+			div.innerText = num + 1;
+			div.setAttribute("class", "line-div");
+			lines.appendChild(div);
+		}
+	}
+	//执行按钮点击事件。
+	btns[0].onclick = function() {
+		var value = textArea.value,
+			len,
+			command = [];	//存储指令
+		value = action.getValue(value, "\n");
+		if ( len = value.length ) {
+			for( var i = 0; i < len; i++ ) {
+				command.push(action.getValue(value[i], " "));
+			}
+		}
+		for ( var i = 0; i < len; i++) {
+			try {
+				if ( validateCmd(command[i]) ) {
+					if ( "tra" == command[i][0] ) {
+						action.move(command[i]);
+						action.validate();
+					} else if ( "mov" == command[i][0] ) {
+						action.changeDirect(command[i]);
+						action.move(command[i]);
+						action.validate();
+					}
+				}
+			} catch(e) {
+				var div_wrong = document.getElementsByClassName("line-div")[i];
+				div_wrong.style.color = "red";
+				throw new Error("输入的指令有误。");
+			}
+		}
+	}
+	//刷新按钮点击事件
+	btns[1].onclick = function() {
+		window.location.reload();
+	}
+</script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+* {
+	padding: 0px;
+	margin: 0px;
+}
+div {
+	box-sizing: border-box;
+}
+	#wrapper {
+		float: left;
+		width: 440px;
+		height: 440px;
+		box-sizing: border-box;
+		position: relative;
+	}
+		#wrapper .div {
+			font-size: 38px;
+			line-height: 40px;
+			text-align: center;
+			box-sizing: border-box;
+			width: 40px;
+			height: 40px;
+			float: left;
+		}
+			#aim {
+				width: 40px;
+				height: 40px;
+				position: absolute;
+				left: 80px;
+				top: 80px;
+				background-color: red;
+				transform: rotateZ(0deg);
+				transition: all 0.5s;
+			}
+			#aim div{
+				margin: 0px;
+				width: 40px;
+				background-color: blue;
+				height: 10px;
+			}
+	#action {
+		float: left;
+		margin: 20px 0px 0px 40px;
+		width: 700px;
+	}
+		#line-num {
+			width: 500px;
+			height: 300px;
+			line-height: 30px;
+			font-size: 30px;
+			text-align: center;
+		}
+			#line-num div {
+				border: 1px solid black;
+				width: 40px;
+				float: left;
+				height: 300px;
+				display: inline-block;
+			}
+			#line-num .line-div {
+				width: 30px;
+				height: 30px;
+				font-size: 30px;
+			}
+			#line-num textarea {
+				margin: 0px;
+				float: left;
+				width: 450px;
+				height: 300px;
+				line-height: 30px;
+				font-size: 30px;
+				color: green;
+				resize: none;
+				background-color: silver;
+			}
+		#action ul {
+			float: left;
+			width: 500px;
+		}
