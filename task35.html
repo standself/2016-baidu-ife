@@ -7,7 +7,7 @@
 </head>
 <body>
 <div id="wrapper">
-	<div id="aim"><div></div></div>
+	<div id="aim" data-box-id="0,0"><div></div></div>
 </div>
 <div id="action">
 	<button>行动</button><button>刷新</button><br>
@@ -26,8 +26,40 @@
 
 <script type="text/javascript">
 	/***
+	 * 事件绑定
+	 * @param dom 	绑定元素
+	 * @param fn 	事件响应函数（回调函数）
+	 * @param type 	事件类型
+	 * @param data  事件传递的数据
+	 ***/
+	var onEvent = function(dom, type, fn, data) {
+	 	if ( document.addEventListener ) {
+	 		return function(dom, type, fn, data) {
+	 			var data = data || {};
+	 			dom.addEventListener(type, function(e) {
+	 				fn.call(dom, e, data);
+	 			}, false);
+	 		};
+	 	} else if ( document.attachEvent ) {
+	 		return function(dom, type, fn, data) {
+	 			var data = data || {};
+	 			dom.attachEvent("on" + type, function(e) {
+	 				fn.call(dom, e, data);
+	 			});
+	 		};
+	 	} else {
+	 		return function(dom, type, fn, data) {
+	 			var data = data || {};
+	 			dom["on" + type] = function(e) {
+	 				fn.call(dom, e, data);
+	 			};
+	 		};
+	 	}
+	 }();
+	/***
 	 * @name 渲染表格函数
 	 * @param 	len 	表格的行列数
+	 * boxId	每个格子的坐标。
 	 ***/
 	function render(len) {
 		wrapper = document.getElementById("wrapper");
@@ -35,6 +67,7 @@
 			for( var j = 0; j < len; j++ ) {
 				var div = document.createElement("div");
 				div.setAttribute("class", "div");
+				div.dataset.boxId = i + "," + j;
 				div.style.borderBottom = "1px solid grey";
 				div.style.borderRight = "1px solid grey";
 				if ( i == 0 && j == 0 ) {
@@ -128,7 +161,10 @@
 			validate: validateLimit
 		};
 	}
-
+	/***
+	 * 命令验证
+	 * @param 	cmd  命令
+	 ***/
 	function validateCmd(cmd) {
 		var act, direct, num;
 		if ( Object.prototype.toString.call(cmd) == "[object Array]" ) {
@@ -140,6 +176,8 @@
 			else return true; 
 		}
 	}
+
+
 	var	aim = document.getElementById("aim"),
 		btns = document.getElementsByTagName("button"),
 		textArea = document.getElementsByTagName("textarea")[0],
@@ -148,8 +186,8 @@
 	var action = new Action(aim);
 
 	//文本框的输入事件。
-	textArea.onkeypress = function(e) {
-		e = e || window.event;
+	onEvent(textArea, "keypress", function(e) {
+		var e = e || window.event;
 		if ( e && e.keyCode == 13) {
 			div = document.createElement("div");
 			var num = lines.getElementsByTagName("div").length;
@@ -157,9 +195,18 @@
 			div.setAttribute("class", "line-div");
 			lines.appendChild(div);
 		}
-	}
+	});
+	//文本框的滚动条事件, 学习了团队cfo的方式，scrollTop。
+	onEvent(textArea, "scroll", function(e) {
+		var e = e || window.event,
+			target = e.target || e.srcElement;
+		console.log("here is 2 event", target.scrollTop);
+		var scrollTop = target.scrollTop;
+		lines.scrollTop = scrollTop;
+
+	})
 	//执行按钮点击事件。
-	btns[0].onclick = function() {
+	onEvent(btns[0], "click", function() {
 		var value = textArea.value,
 			len,
 			command = [];	//存储指令
@@ -184,14 +231,16 @@
 			} catch(e) {
 				var div_wrong = document.getElementsByClassName("line-div")[i];
 				div_wrong.style.color = "red";
+				lines.scrollTop = i * 30 + "px";
 				throw new Error("输入的指令有误。");
 			}
 		}
-	}
+	});
 	//刷新按钮点击事件
-	btns[1].onclick = function() {
+	onEvent(btns[1], "click", function() {
 		window.location.reload();
-	}
+	});
+	console.log(Object.prototype.toString.call(aim.getAttribute("data-box-id")));
 </script>
 </body>
 </html>

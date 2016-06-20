@@ -49,12 +49,13 @@ div {
 			font-size: 30px;
 			text-align: center;
 		}
-			#line-num div {
+			#line-num > div {
 				border: 1px solid black;
 				width: 40px;
 				float: left;
 				height: 300px;
 				display: inline-block;
+				overflow: hidden;
 			}
 			#line-num .line-div {
 				width: 30px;
