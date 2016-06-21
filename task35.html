@@ -10,7 +10,7 @@
 	<div id="aim" data-box-id="0,0"><div></div></div>
 </div>
 <div id="action">
-	<button>行动</button><button>刷新</button><br>
+	<button>行动</button><button>刷新</button><br><button>获取transform值</button>
 	<div id="line-num">
 		<div><div class="line-div">1</div></div>
 		<textarea></textarea><br>
@@ -227,6 +227,7 @@
 						action.move(command[i]);
 						action.validate();
 					}
+					console.log( getComputedStyle(aim, false)["transform"] );
 				}
 			} catch(e) {
 				var div_wrong = document.getElementsByClassName("line-div")[i];
@@ -240,7 +241,11 @@
 	onEvent(btns[1], "click", function() {
 		window.location.reload();
 	});
+	onEvent(btns[2], "click", function() {
+		console.log(getComputedStyle(aim, false)["transform"].split(", ")[2]);
+	})
 	console.log(Object.prototype.toString.call(aim.getAttribute("data-box-id")));
+	console.log( getComputedStyle(aim, false)["transform"] );
 </script>
 </body>
 </html>
