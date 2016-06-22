@@ -4,6 +4,7 @@
 	<title>task 35</title>
 	<meta charset="utf-8"/>
 	<link rel="stylesheet" type="text/css" href="./css/task35.css"/>
+	<script type="text/javascript" src="./javascript/task36.js"></script>
 </head>
 <body>
 <div id="wrapper">
@@ -171,9 +172,9 @@
 			act = cmd[0].toLowerCase();
 			direct = cmd[1].toLowerCase();
 			num = parseInt(cmd[2]);
-			if ( "left right top bottom".indexOf(direct) == -1 || "mov tra".indexOf(act) == -1 ) return false;
+			/*if ( "left right top bottom".indexOf(direct) == -1 || "mov tra".indexOf(act) == -1 || "moveto".indexOf(act) == -1 ) return false;
 			else if ( num && num == NaN ) return false;
-			else return true; 
+			else */return true; 
 		}
 	}
 
@@ -217,7 +218,7 @@
 			}
 		}
 		for ( var i = 0; i < len; i++) {
-			try {
+			//try {
 				if ( validateCmd(command[i]) ) {
 					if ( "tra" == command[i][0] ) {
 						action.move(command[i]);
@@ -226,15 +227,21 @@
 						action.changeDirect(command[i]);
 						action.move(command[i]);
 						action.validate();
+					} else if ( "moveto" == command[i][0] ) {
+						console.log("HERE1");
+						var x = parseInt(command[i][1][0]),
+							y = parseInt(command[i][1][command[i][1][length - 1]]);
+						console.log("here2", Wall.moveTo);
+						Wall.moveTo(x, y);
+						console.log("moveto", Wall);
 					}
-					console.log( getComputedStyle(aim, false)["transform"] );
 				}
-			} catch(e) {
+			/*} catch(e) {
 				var div_wrong = document.getElementsByClassName("line-div")[i];
 				div_wrong.style.color = "red";
 				lines.scrollTop = i * 30 + "px";
-				throw new Error("输入的指令有误。");
-			}
+				//throw new Error("输入的指令有误。");
+			}*/
 		}
 	});
 	//刷新按钮点击事件
@@ -244,8 +251,7 @@
 	onEvent(btns[2], "click", function() {
 		console.log(getComputedStyle(aim, false)["transform"].split(", ")[2]);
 	})
-	console.log(Object.prototype.toString.call(aim.getAttribute("data-box-id")));
-	console.log( getComputedStyle(aim, false)["transform"] );
 </script>
+
 </body>
 </html>

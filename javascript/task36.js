@@ -35,7 +35,9 @@ var Wall = {
 			walls.doms.push(div);
 		} else {
 			console.log("已经有这个墙了。");
+			return false;
 		}
+		return true;
 	},
 	/***
 	 * @name 	粉刷墙
@@ -52,8 +54,8 @@ var Wall = {
 				"bottom": -1.24465e-16,
 				"right": -1
 			},
-			xCoordinate = parseInt(aim.style.left) % 40,
-			yCoordinate = parseInt(aim.style.top) % 40;
+			xCoordinate = parseInt(aim.style.left) / 40,
+			yCoordinate = parseInt(aim.style.top) / 40;
 			x, y;//需要粉刷墙壁的坐标
 		//获得方块的方向
 		function getDirect(degree){
@@ -86,5 +88,59 @@ var Wall = {
 		} else {
 			console.log("没有墙壁可供粉刷。");
 		}
+	},
+	randomWall: function() {
+		var x = Math.floor(Math.random()) * 10,
+			y = Math.floor(Math.random()) * 10;
+		if (buildWall(x, y) ) console.log("随机建墙失败。");
+	},
+	longWall: function(coordinateArr) {
+
+	},
+	moveTo: function(x, y) {
+		var aim = document.getElementById("aim"),
+			x0 = parseInt(aim.style.left) / 40,
+			y0 = parseInt(aim.style.top) / 40,
+			stepX = ( (x - x0) >= 0 ) ? (x - x0) : (x0 -x),
+			stepy = ( (y - y0) >= 0 ) ? (y - y0) : (y0 -y);
+		var timer = setInterval(function() {
+			console.log("moveTo selfe");
+			if ( (x >= x0) && (y >= y0) ) {
+				x0 = 
+				aim.style.left = x0 * 40 + "px";
+				aim.style.top = y0 * 40 + "px";
+			} else if ( (x < x0) && ( y >= y0 ) ) {
+				if ( x0 != x ) {
+					x0 -= 1;
+					aim.style.left = x0 * 40 + "px";
+					aim.style.top = y0 * 40 + "px";
+				} else if ( y0 != y ) {
+					y0 += 1;
+					aim.style.left = x0 * 40 + "px";
+					aim.style.top = y0 * 40 + "px";
+				}
+			} else if ( x >= x0 && y < y0 ) {
+				if ( x0 != x ) {
+					x0 += 1;
+					aim.style.left = x0 * 40 + "px";
+					aim.style.top = y0 * 40 + "px";
+				} else if ( y0 != y ) {
+					y0 -= 1;
+					aim.style.left = x0 * 40 + "px";
+					aim.style.top = y0 * 40 + "px";
+				}
+			} else {
+				if ( x0 != x ) {
+					x0 -= 1;
+					aim.style.left = x0 * 40 + "px";
+					aim.style.top = y0 * 40 + "px";
+				} else if ( y0 != y ) {
+					y0 -= 1;
+					aim.style.left = x0 * 40 + "px";
+					aim.style.top = y0 * 40 + "px";
+				}
+			}
+			if ( x0 == x && y0 == y ) clearInterval(timer);
+		}, 1000);	
 	}
 }
