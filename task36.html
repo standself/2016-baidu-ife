@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>task 36</title>
+	<meta charset="utf-8">
+	<script type="text/javascript" src="./javascript/MyAstarFind.version.02.js"></script>
+	<link rel="stylesheet" type="text/css" href="./css/task35.css">
+</head>
+<body>
+<div id="wrapper">
+	<div id="aim" data-box-id="0,0"><div></div></div>
+	</div>
+<script type="text/javascript">
+	function render(len, walls) {
+		wrapper = document.getElementById("wrapper");
+		for( var i = 0; i < len; i++ ) {
+			for( var j = 0; j < len; j++ ) {
+				var div = document.createElement("div");
+				div.setAttribute("class", "div");
+				div.dataset.boxId = i + "," + j;
+				div.style.borderBottom = "1px solid grey";
+				div.style.borderRight = "1px solid grey";
+				if ( i == 0 && j == 0 ) {
+					div.style.borderBottom = "";
+					div.style.borderRight = ""
+				}
+				if ( i == 0 && j != 0 ) {
+					div.innerText = j;
+					div.style.borderBottom = "1px solid red";
+					div.style.borderRight = ""
+				}
+				if ( j == 0 && i != 0 ) {
+					div.innerText = i;
+					div.style.borderBottom = "";
+					div.style.borderRight = "1px solid red";
+				}
+				if ( j == len -1 && i != 0) {
+					div.style.borderBottom = "1px solid grey";
+					div.style.borderRight = "1px solid red";
+				}
+				if ( j != 0 && i == len -1 ) {
+					div.style.borderBottom = "1px solid red";
+					div.style.borderRight = "1px solid grey";
+					if ( j == len -1 ) div.style.borderRight = "1px solid red";
+				}
+				for ( var k = 0; k < walls.length; k++ ) {
+					if ( walls[k][0] == i && walls[k][1] == j ) {
+						div.className = div.className + " wall";
+					}
+				}
+				wrapper.appendChild(div);
+			}
+		}
+	}
+
+	//墙壁或障碍物的坐标。
+	var walls = [
+		[4, 2], [8, 8], [10, 9]
+	];
+
+	render(11, walls);
+
+	var find_path = new FindPath(2, 2, 5, 2, walls),
+		road= find_path.findpath();
+	if ( road.length ) {
+		var i = 0;
+		var aimDom = document.getElementById("aim"),
+			timer = setInterval(function() {
+			if ( i > road.length - 1 ) clearInterval(timer);
+			else {
+				aimDom.style.left = road[i][0] * 40 + "px";
+				aimDom.style.top = road[i][1] * 40 + "px";
+				i = i + 1;
+			}
+		}, 500);
+	};
+	
+</script>
+</body>
+</html>
