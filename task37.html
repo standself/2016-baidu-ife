@@ -157,7 +157,7 @@
 		e = e || window.event;
 		var dx = e.clientX - login.offsetLeft,
 			dy = e.clientY - login.offsetTop;
-			console.log("heere'");
+		//这里不能用bindEvent，因为无法通过后面的对move事件重写取消该事件回调函数。
 		document.onmousemove = function(e) {		
 			e = e || window.event;
 			var maxWidth = window.innerWidth - login.offsetWidth,
