@@ -16,41 +16,55 @@
 			text-align: center;
 			background-color: silver;
 		}
-
-		.clipHide {
+		.hide {
 			display: none;
 		}
-		.clipShow {
+		.show {
 			display: block;
+		}
+
+		#clip{
 			position: fixed;
 			left: 0px;
 			top: 0px;
-			z-index: 200;
+			z-index: 2;
 			background-color: rgba(0, 0, 0, 0.5);
-			font-size: 20px;
+			width: 100%;
+			height: 100%;
 		}
-			.clipShow .login {
-				margin: auto;
-				width: calc(100% / 3);
-				height: calc(100% / 5);
-				resize: both;
-				position: absolute;
-				background-color: white;
+		#login {
+			margin: auto;
+			width: calc(100% / 3);
+			height: calc(100% / 5);
+			overflow: hidden;
+			resize: both;
+			position: fixed;
+			background-color: white;
+			z-index: 20;
+		}
+			.bar {
+				line-height: 30px;
+				min-height: 30px;
+				width: 100%;
+				background-color: steelblue;			
 			}
-				.login div {
-					line-height: 30px;
-					background-color: steelblue;			
-				}
-				.clipShow .login img {
+				.bar img {
 					width: 20px;
 					height: 20px;
-					margin-left: calc(100% - 70px);
-					margin-right: 10px;
+					float: right;
 				}
-				.clipShow .login input {
-					margin: 15px 0px 15px 0px;
-					width: calc(100% - 90px);
-					height: 30px;
+			#login .input {
+				resize: both;
+				clear: both;
+				margin: 10px auto 10px auto;
+				width: calc(100% - 70px);
+				height: calc( 50% - 10px);
+				line-height: 30px;
+			}
+				#login input {
+					margin-top: 10px;
+					width: 70%;
+					height: calc(100% / 2 - 10px);
 				}
 	</style>
 </head>
@@ -78,11 +92,14 @@
 	<p>这里是正文</p>
 	<button>发送邮件</button>
 </div>
-<div id="clip" class="clipHide">
-	<div id="login" class="login">
-		<div><span>登陆</span><img src="./image/task7-image-icon4.jpg"></div>
-		<label for="username"/>用户名：<input type="username" id= "username" placeholder="请输入用户名或者邮箱"></input>
-		<label for="password"/>密&nbsp;码：<input type="password" id="password" placeholder="请输入密码"></input>
+<div id="clip" class="hide"></div>
+<div id="login" class="hide">
+	<div class="bar">
+		<span>登陆</span><img src="./image/task7-image-icon4.jpg">
+	</div>
+	<div class="input">
+		<label for="username">用户名:</label><input name="username" type="text" placeholder="请输入用户名."/><br>
+		<label for="passowrd">密&nbsp;码:</label><input name="password" type="text" placeholder="请输入用户名."/>
 	</div>
 </div>
 
@@ -94,75 +111,71 @@
 		if ( document.addEventListener ) {
 			return function(dom, type, fn) {
 				dom.addEventListener(type, function(e) {
-					fn.call(e);
+					fn.call(this, e);
 				}, false);
 			};
 		} else if ( document.attachEvent ) {
 			return function(dom, type, fn) {
 				dom.attachEvent("on" + type, function(e) {
-					fn.call(e);
+					fn.call(this, e);
 				});
 			};
 		} else {
 			return function(dom, type, fn) {
-				dom["on" + type] = fn.call(e);
+				dom["on" + type] = fn.call(this, e);
 			};
 		}
 	}();
 
-	var clip = document.getElementById("clip"),
-		login = document.getElementById("login"),
-		img = login.getElementsByTagName("img")[0],
-		bar = login.getElementsByTagName("div")[0];
-	console.log(bar);
-	//点击浮层空白处浮层消失
-	bindEvent(clip, "mousedown", function(e) {
-		//onclick的事件响应是在鼠标按下、松开实现，获得target是在松开时的位置。
-		var e = e || window.event,
-			target = e.target || e.srcElement;
-		e.stopPropagation();//阻止冒泡
-		if ( target == this ) this.className = "clipHide";
-		else if ( target == img ) this.className = "clipHide";
-		else if ( target == bar ) {
-			bindEvent(bar, "mousedown", function(e) {
-				drag(e);
-			});
-			console.log("ler");
-			bindEvent(bar, "mouseup", function() {
-				document.onmouseup = null;
-				document.onmousemove = null;
-			});
-		}
-	});
-	//点击出现浮层
 	var btn = document.getElementsByTagName("button")[0];
-	bindEvent(btn, "click", function(e) {
-		clip.style.width = window.innerWidth + "px";
-		clip.style.height = window.innerHeight + "px";
-		clip.className = "clipShow";
-		login.style.left = window.innerWidth / 2 - parseInt(getComputedStyle(login, false)["width"]) / 2 + "px";
-		login.style.top =  window.innerHeight / 2 - 200 + "px";
+	//点击出现遮盖层
+	bindEvent(btn, "click", function() {
+		var clip = document.getElementById("clip"),
+			login = document.getElementById("login");
+		clip.className = "show";
+		login.className = "show";
+		login.style.left = window.innerWidth / 2 - login.offsetWidth / 2 + "px";
+		login.style.top = window.innerHeight / 2 - login.offsetHeight / 2 + "px";
 	});
 
-	//点击浮层的工具栏，可拖拽移动
-	function drag(e) {
+	var clip = document.getElementById("clip"),
+		bar = document.getElementsByClassName("bar")[0],
+		img = document.getElementsByTagName("img")[0],
+		login = document.getElementById("login");
+	//遮盖层点击隐藏遮盖层
+	bindEvent(clip, "click", function() {
+		clip.className = "hide";
+		login.className = "hide";
+	});
+	//关闭按钮点击隐藏遮盖层
+	bindEvent(img, "click", function() {
+		clip.className = "hide";
+		login.className = "hide";
+	});
+	//窗口拖拽
+	bindEvent(bar, "mousedown", function(e) {
 		e = e || window.event;
-		var dx = e.clientX - this.offsetLeft,
-			dy = e.clientY - this.offsetTop;
-		bindEvent(document, "mousemove", function(ev) {
-			ev = ev || window.event;
-			var move = function(e, dx, dy) {
-				if ( (ev.clientX - dx) >=0 && (ev.clientY - dy) >=0 && ( login.style.width + ev.clientX - dx) <= window.innerWidth && (login.style.height + ev.clientY - dy) <= window.innerHeight ) {
-					login.style.left = ev.clientX - dx + "px";
-					login.style.top = ev.clientY - dy + "px";
-				}
-			}(ev, dx, dy);
-		});
-	}
-	/*bar.onmouseup = function() {
-		document.onmouseup = null;
+		var dx = e.clientX - login.offsetLeft,
+			dy = e.clientY - login.offsetTop;
+			console.log("heere'");
+		document.onmousemove = function(e) {		
+			e = e || window.event;
+			var maxWidth = window.innerWidth - login.offsetWidth,
+				maxHeight = window.innerHeight - login.offsetHeight,
+				left = login.offsetLeft,
+				top = login.offsetTop;
+			console.log("mousemove", login.offsetWidth);
+			if ( e.clientX - dx >= 0 && e.clientY - dy >= 0 && left <= maxWidth && top <= maxHeight ) {
+				login.style.left = e.clientX - dx + "px";
+				login.style.top = e.clientY - dy + "px";
+			}
+		};
+	});
+	bindEvent(bar, "mouseup", function() {
+		console.log("mouseup", this);
 		document.onmousemove = null;
-	}*/
+	})
+
 </script>
 </body>
 </html>
